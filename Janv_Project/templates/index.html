@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Graduaction Prediction</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
+
+        :root {
+            --main: #0a192f;
+            --mainlight: #172a46;
+            --white: #ccd6f6;
+            --cyan: #5ff0d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background: linear-gradient(#141e30, #2a6c56);
+        }
+
+        .login-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            padding: 40px;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+        }
+
+        .login-box h2 {
+            margin: 0 0 30px;
+            padding: 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        .login-box .user-box {
+            position: relative;
+            border-radius: 20px;
+        }
+
+        .login-box .user-box input {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 30px;
+            outline: none;
+            background: transparent;
+            border-radius: 10px;
+        }
+
+        /* .user-box input:hover {
+            box-shadow: var(--cyan) 0px 0px 20px;
+            border: 1px solid var(--cyan);
+        } */
+
+        .login-box .user-box label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;
+            transition: 0.5s;
+            /* border-radius: 20px; */
+        }
+
+        .login-box .user-box span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 45px 10px;
+            font-size: 13px;
+            color: red;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .login-box .user-box input:focus~label,
+        .login-box .user-box input:valid~label {
+            top: -20px;
+            left: 0;
+            color: #03f484;
+            font-size: 12px;
+        }
+
+
+        .login-box form a {
+            position: relative;
+            display: inline-block;
+            padding: 10px 20px;
+            color: #03f484;
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            overflow: hidden;
+            transition: 0.5s;
+            margin-top: 40px;
+            letter-spacing: 4px;
+        }
+
+        .login-box a:hover {
+            background: #03f484;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #03f484, 0 0 25px #03f484, 0 0 50px #03f484, 0 0 100px #03f484;
+        }
+
+        .login-box a span {
+            position: absolute;
+            display: block;
+        }
+
+        .login-box a span:nth-child(1) {
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #03f484);
+            animation: btn-anim1 1s linear infinite;
+        }
+
+        @keyframes btn-anim1 {
+            0% {
+                left: -100%;
+            }
+
+            50%,
+            100% {
+                left: 100%;
+            }
+        }
+
+        .login-box a span:nth-child(2) {
+            top: -100%;
+            right: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #03f484);
+            animation: btn-anim2 1s linear infinite;
+            animation-delay: 0.25s;
+        }
+
+        @keyframes btn-anim2 {
+            0% {
+                top: -100%;
+            }
+
+            50%,
+            100% {
+                top: 100%;
+            }
+        }
+
+        .login-box a span:nth-child(3) {
+            bottom: 0;
+            right: 100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(270deg, transparent, #03f484);
+            animation: btn-anim3 1s linear infinite;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes btn-anim3 {
+            0% {
+                right: -100%;
+            }
+
+            50%,
+            100% {
+                right: 100%;
+            }
+        }
+
+        .login-box a span:nth-child(4) {
+            bottom: -100%;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(360deg, transparent, #03f484);
+            animation: btn-anim4 1s linear infinite;
+            animation-delay: 0.75s;
+        }
+
+        @keyframes btn-anim4 {
+            0% {
+                bottom: -100%;
+            }
+
+            50%,
+            100% {
+                bottom: 100%;
+            }
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-box">
+        <h2>Student Graduation Prediction</h2>
+        <form id="myForm" action="/process_form" method="POST">
+            <div class="user-box">
+                <input type="text" name="Name" id="formName" onchange="validateName()">
+                <label for="Name">Name</label>
+                <span id="name_error"></span>
+            </div>
+            <div class="user-box">
+                <input type="number" name="Sem1" id="Sem1" onchange="validateSem1()">
+                <label for="Sem1">Sem1</label>
+                <span id="sem1_error"></span>
+            </div>
+            <div class="user-box">
+                <input type="number" name="Sem2" id="Sem2" onchange="validateSem2()">
+                <label for="Sem2">Sem2</label>
+                <span id="sem2_error"></span>
+            </div>
+            <div class="user-box">
+                <input type="number" name="Sem3" id="Sem3" onchange="validateSem3()">
+                <label for="Sem3">Sem3</label>
+                <span id="sem3_error"></span>
+            </div>
+            <div class="user-box">
+                <input type="number" name="Sem4" id="Sem4" onchange="validateSem4()">
+                <label for="Sem4">Sem4</label>
+                <span id="sem4_error"></span>
+            </div>
+            <div class="user-box">
+                <input type="number" name="Sem5" id="Sem5" onchange="validateSem5()">
+                <label for="Sem5">Sem5</label>
+                <span id="sem5_error"></span>
+            </div>
+            <div class="user-box">
+                <input type="number" name="Sem6" id="Sem6" onchange="validateSem6()">
+                <label for="Sem6">Sem6</label>
+                <span id="sem6_error"></span>
+            </div>
+            <div class="user-box">
+                <input type="number" name="Sem7" id="Sem7" onchange="validateSem7()">
+                <label for="Sem7">Sem7</label>
+                <span id="sem7_error"></span>
+            </div>
+            <div class="user-box">
+                <input type="number" name="Sem8" id="Sem8" onchange="validateSem8()">
+                <label for="Sem8">Sem8</label>
+                <span id="sem8_error"></span>
+            </div>
+
+            <a href="#" id="submitForm">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>Submit
+            </a>
+        </form>
+    </div>
+    <script>
+        submitflag_name = false;
+        submitflag_sem1 = false;
+        submitflag_sem2 = false;
+        submitflag_sem3 = false;
+        submitflag_sem4 = false;
+        submitflag_sem5 = false;
+        submitflag_sem6 = false;
+        submitflag_sem7 = false;
+        submitflag_sem8 = false;
+
+        document.getElementById("submitForm").addEventListener("click", function () {
+            console.log("entered")
+            console.log(submitflag_name, submitflag_sem1, submitflag_sem2, submitflag_sem3, submitflag_sem4, submitflag_sem5, submitflag_sem6, submitflag_sem7, submitflag_sem8)
+            if (submitflag_name && submitflag_sem1 && submitflag_sem2 && submitflag_sem3 && submitflag_sem4 && submitflag_sem5 && submitflag_sem6 && submitflag_sem7 && submitflag_sem8) {
+                document.getElementById("myForm").submit();
+            }
+
+        });
+
+
+        function validateName() {
+            var name = document.getElementById("formName").value;
+            if (name[0] == "J") {
+                document.getElementById("name_error").innerHTML = "Name is Invalid"
+                // document.getElementById("formName").style.color = "red";
+            }
+            else {
+                submitflag_name = true;
+                document.getElementById("name_error").innerHTML = ""
+            }
+
+        }
+
+        function validateSem1() {
+            var sem1 = document.getElementById("Sem1").value;
+            console.log(sem1);
+            if (sem1 == "") {
+                document.getElementById("sem1_error").innerHTML = "please enter Sem1 grade"
+            }
+            else if (sem1 < 0) {
+                document.getElementById("sem1_error").innerHTML = "Grades shoulde be greater than 0"
+            }
+            else if(sem1>10)
+            {
+                document.getElementById("sem1_error").innerHTML = "Invalid Sem Grade" 
+            }
+            else {
+                submitflag_sem1 = true;
+                document.getElementById("sem1_error").innerHTML = ""
+            }
+        }
+        function validateSem2() {
+            var sem2 = document.getElementById("Sem2").value;
+            console.log(sem2);
+            if (sem2 == "") {
+                document.getElementById("sem2_error").innerHTML = "please enter Sem2 grade"
+            }
+            else if (sem2 < 0) {
+                document.getElementById("sem2_error").innerHTML = "Grades shoulde be greater than 0"
+            }
+            else if(sem2>10)
+            {
+                document.getElementById("sem2_error").innerHTML = "Invalid Sem Grade" 
+            }
+            else {
+                submitflag_sem2 = true;
+                document.getElementById("sem2_error").innerHTML = ""
+            }
+        }
+        function validateSem3() {
+            var sem3 = document.getElementById("Sem3").value;
+            console.log(sem3);
+            if (sem3 == "") {
+                document.getElementById("sem3_error").innerHTML = "please enter Sem3 grade"
+            }
+            else if (sem3 < 0) {
+                document.getElementById("sem3_error").innerHTML = "Grades shoulde be greater than 0"
+            }
+            else if(sem3>10)
+            {
+                document.getElementById("sem3_error").innerHTML = "Invalid Sem Grade" 
+            }
+            else {
+                submitflag_sem3 = true;
+                document.getElementById("sem3_error").innerHTML = ""
+            }
+        }
+        function validateSem4() {
+            var sem4 = document.getElementById("Sem4").value;
+            console.log(sem4);
+            if (sem4 == "") {
+                document.getElementById("sem4_error").innerHTML = "please enter Sem4 grade"
+            }
+            else if (sem4 < 0) {
+                document.getElementById("sem4_error").innerHTML = "Grades shoulde be greater than 0"
+            }
+            else if(sem4>10)
+            {
+                document.getElementById("sem4_error").innerHTML = "Invalid Sem Grade" 
+            }
+            else {
+                submitflag_sem4 = true;
+                document.getElementById("sem4_error").innerHTML = ""
+            }
+        }
+        function validateSem5() {
+            var sem5 = document.getElementById("Sem5").value;
+            console.log(sem5);
+            if (sem5 == "") {
+                document.getElementById("sem5_error").innerHTML = "please enter Sem5 grade"
+            }
+            else if (sem5 < 0) {
+                document.getElementById("sem5_error").innerHTML = "Grades shoulde be greater than 0"
+            }
+            else if(sem5>10)
+            {
+                document.getElementById("sem5_error").innerHTML = "Invalid Sem Grade" 
+            }
+            else {
+                submitflag_sem5 = true;
+                document.getElementById("sem5_error").innerHTML = ""
+            }
+        }
+        function validateSem6() {
+            var sem6 = document.getElementById("Sem6").value;
+            console.log(sem6);
+            if (sem6 == "") {
+                document.getElementById("sem6_error").innerHTML = "please enter Sem6 grade"
+            }
+            else if (sem6 < 0) {
+                document.getElementById("sem6_error").innerHTML = "Grades shoulde be greater than 0"
+            }
+            else if(sem6>10)
+            {
+                document.getElementById("sem6_error").innerHTML = "Invalid Sem Grade" 
+            }
+            else {
+                submitflag_sem6 = true;
+                document.getElementById("sem6_error").innerHTML = ""
+            }
+        }
+        function validateSem7() {
+            var sem7 = document.getElementById("Sem7").value;
+            console.log(sem7);
+            if (sem7 == "") {
+                document.getElementById("sem7_error").innerHTML = "please enter Sem7 grade"
+            }
+            else if (sem7 < 0) {
+                document.getElementById("sem7_error").innerHTML = "Grades shoulde be greater than 0"
+            }
+            else if(sem7>10)
+            {
+                document.getElementById("sem7_error").innerHTML = "Invalid Sem Grade" 
+            }
+            else {
+                submitflag_sem7 = true;
+                document.getElementById("sem7_error").innerHTML = ""
+            }
+        }
+        function validateSem8() {
+            var sem8 = document.getElementById("Sem8").value;
+            console.log(sem8);
+            if (sem8 == "") {
+                document.getElementById("sem8_error").innerHTML = "please enter Sem8 grade"
+            }
+            else if (sem8 < 0) {
+                document.getElementById("sem8_error").innerHTML = "Grades shoulde be greater than 0"
+            }
+            else if(sem8>10)
+            {
+                document.getElementById("sem8_error").innerHTML = "Invalid Sem Grade" 
+            }
+            else {
+                submitflag_sem8 = true;
+                document.getElementById("sem8_error").innerHTML = ""
+            }
+        }
+    </script>
+</body>
+
+</html>
